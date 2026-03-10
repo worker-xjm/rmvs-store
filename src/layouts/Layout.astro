@@ -1,23 +1,21 @@
+---
+import "../styles/global.css";
+---
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-full">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>RMVS Market | Women's Fashion</title>
 	</head>
-	<body>
-		<slot />
+	<body class="min-h-full bg-slate-50 text-slate-900 antialiased">
+		<div class="flex min-h-screen flex-col">
+			<main class="flex-1">
+				<slot />
+			</main>
+		</div>
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

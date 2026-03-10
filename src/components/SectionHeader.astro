@@ -1,0 +1,21 @@
+---
+interface Props {
+  id?: string;
+  title: string;
+}
+
+const { id, title } = Astro.props;
+---
+<header
+  id={id}
+  class="mb-4 flex items-baseline justify-between gap-4 sm:mb-6"
+>
+  <h2 class="text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">
+    {title}
+  </h2>
+  <span class="hidden text-xs font-medium text-fuchsia-700 sm:inline-flex">
+    See all
+    <span class="ml-1 text-base leading-none">›</span>
+  </span>
+</header>
+

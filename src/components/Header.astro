@@ -1,0 +1,32 @@
+---
+const navItems = [
+  { href: "#home", label: "HOME" },
+  { href: "#about", label: "About us" },
+  { href: "#contact", label: "Contact us" },
+  { href: "#shop", label: "Shop Now" },
+];
+---
+<header
+  class="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur"
+>
+  <div
+    class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6 lg:px-8"
+  >
+    <a href="#home" class="text-lg font-semibold tracking-tight text-slate-900">
+      RMVS Market
+    </a>
+    <nav class="hidden items-center gap-6 text-sm font-medium text-slate-700 md:flex">
+      {
+        navItems.map((item) => (
+          <a
+            href={item.href}
+            class="transition-colors hover:text-fuchsia-600"
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>
+

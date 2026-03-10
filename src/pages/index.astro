@@ -1,11 +1,42 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/Header.astro";
+import HeroBanner from "../components/HeroBanner.astro";
+import ProductSection from "../components/ProductSection.astro";
+import Footer from "../components/Footer.astro";
+import type { Product } from "../data/products";
+import {
+  bestSellers,
+  newProducts,
+  hotProducts,
+  accessoryProducts,
+  allProducts,
+} from "../data/products";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const sections: {
+  id: string;
+  title: string;
+  products: Product[];
+}[] = [
+  { id: "best-sellers", title: "Best Sellers >", products: bestSellers },
+  { id: "new", title: "New >", products: newProducts },
+  { id: "hot", title: "Hot >", products: hotProducts },
+  { id: "accessory", title: "Accessory >", products: accessoryProducts },
+  { id: "all", title: "All", products: allProducts },
+];
 ---
 
 <Layout>
-	<Welcome />
+  <Header />
+  <HeroBanner />
+  {
+    sections.map((section) => (
+      <ProductSection
+        sectionId={section.id}
+        title={section.title}
+        products={section.products}
+      />
+    ))
+  }
+  <Footer />
 </Layout>
