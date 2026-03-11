@@ -1,0 +1,9 @@
+#header {
+  background-image: linear-gradient(
+    120deg,
+    #ff6cab 0%,
+    #ff4e8a 35%,
+    #ff2f6c 65%,
+    #f61d5f 100%
+  );
+}

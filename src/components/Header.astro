@@ -1,4 +1,5 @@
 ---
+import "./header.css";
 const navItems = [
   { href: "/", label: "HOME" },
   { href: "/about-us", label: "About us" },
@@ -6,23 +7,25 @@ const navItems = [
   { href: "/shop-now", label: "Shop Now" },
 ];
 ---
-
 <header
   id="header"
-  class="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur"
+  class="sticky top-0 z-40 h-22 text-white shadow-md"
 >
   <div
-    class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6 lg:px-8"
+    class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6 lg:px-8 h-full"
   >
-    <a href="#home" class="text-lg font-semibold tracking-tight text-slate-900">
+    <a href="#home" class="text-lg font-semibold tracking-tight">
       RMVS Market
     </a>
     <nav
-      class="hidden items-center gap-6 text-sm font-medium text-slate-700 md:flex"
+      class="hidden items-center gap-8 text-sm font-medium md:flex"
     >
       {
         navItems.map((item) => (
-          <a href={item.href} class="transition-colors hover:text-fuchsia-600">
+          <a
+            href={item.href}
+            class="transition-colors hover:text-pink-100 text-pink-50/80"
+          >
             {item.label}
           </a>
         ))
