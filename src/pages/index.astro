@@ -12,12 +12,12 @@ import {
   accessoryProducts,
   allProducts,
 } from "../data/products";
-
-const sections: {
+type Section = {
   id: string;
   title: string;
   products: Product[];
-}[] = [
+};
+const sections: Section[] = [
   { id: "best-sellers", title: "Best Sellers >", products: bestSellers },
   { id: "new", title: "New >", products: newProducts },
   { id: "hot", title: "Hot >", products: hotProducts },

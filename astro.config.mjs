@@ -8,7 +8,7 @@ const isProduction = process.env.NODE_ENV === "production";
 // https://astro.build/config
 export default defineConfig({
   output: "server",
-  adapter:isProduction? cloudflare():void 0,
+  adapter: isProduction ? cloudflare() : void 0,
   site: isProduction ? "https://rmvs.site/" : void 0,
   vite: {
     plugins: [tailwindcss()],
