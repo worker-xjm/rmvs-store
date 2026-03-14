@@ -1,10 +1,12 @@
 import type { APIRoute } from "astro";
-import { google } from "googleapis";
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "astro:env/server";
 import {
   getBaseUrl,
   OAUTH_STATE_COOKIE,
+  exchangeCodeForTokens,
+  fetchGoogleUserInfo,
 } from "../../../../lib/auth";
+export const prerender = false;
 
 export const GET: APIRoute = async ({
   request,
@@ -32,25 +34,37 @@ export const GET: APIRoute = async ({
   const baseUrl = getBaseUrl(request);
   const redirectUri = `${baseUrl}/api/webhook/google/auth`;
 
-  const oauth2Client = new google.auth.OAuth2(
-    clientId,
-    clientSecret,
-    redirectUri
-  );
-
+  let tokens: {
+    access_token?: string;
+    refresh_token?: string;
+    expiry_date?: number;
+  };
   try {
-    const { tokens } = await oauth2Client.getToken(code);
-    oauth2Client.setCredentials(tokens);
+
+    tokens = await exchangeCodeForTokens(
+      clientId,
+      clientSecret,
+      redirectUri,
+      code
+    );
   } catch (err) {
     console.error("Google token error:", err);
     return redirect("/", 302);
   }
 
-  const oauth2 = google.oauth2({ version: "v2", auth: oauth2Client });
-  let data: { id?: string | null; name?: string | null; email?: string | null; picture?: string | null };
+  const accessToken = tokens.access_token;
+  if (!accessToken) {
+    return redirect("/", 302);
+  }
+
+  let data: {
+    id?: string | null;
+    name?: string | null;
+    email?: string | null;
+    picture?: string | null;
+  };
   try {
-    const res = await oauth2.userinfo.get();
-    data = res.data ?? {};
+    data = await fetchGoogleUserInfo(accessToken);
   } catch (err) {
     console.error("Google userinfo error:", err);
     return redirect("/", 302);
@@ -64,6 +78,13 @@ export const GET: APIRoute = async ({
   };
 
   await session?.set("user", user);
+  if (tokens.access_token != null || tokens.refresh_token != null) {
+    await session?.set("google_tokens", {
+      access_token: tokens.access_token,
+      refresh_token: tokens.refresh_token,
+      expiry_date: tokens.expiry_date,
+    });
+  }
 
   return redirect("/", 302);
 };

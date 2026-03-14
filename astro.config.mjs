@@ -3,15 +3,17 @@ import { defineConfig, envField } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
 import process from "node:process";
 import tailwindcss from "@tailwindcss/vite";
-const isProduction = process.env.NODE_ENV === "production";
+// 仅在 CI/部署时设置 site，本地 build+preview 不设置，避免预览时资源或 canonical 指向生产域名
+const isDeployBuild =
+  process.env.CI === "true" || process.env.DEPLOY_BUILD === "true";
 // https://astro.build/config
 export default defineConfig({
-  output: "server",
+  // output: "server",
   server: {
     host: true,
   },
   adapter: cloudflare(),
-  site: isProduction ? "https://rmvs.site/" : void 0,
+  site: isDeployBuild ? "https://rmvs.site/" : void 0,
   env: {
     schema: {
       GOOGLE_CLIENT_ID: envField.string({

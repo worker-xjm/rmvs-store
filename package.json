@@ -16,7 +16,7 @@
     "@astrojs/cloudflare": "^13.0.0",
     "@tailwindcss/vite": "^4.2.1",
     "astro": "^6.0.0",
-    "googleapis": "^171.4.0",
+    "ky": "^1.14.3",
     "tailwindcss": "^4.2.1",
     "wrangler": "^4.71.0"
   },
