@@ -1,10 +1,9 @@
 import type { APIRoute } from "astro";
+import { google } from "googleapis";
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "astro:env/server";
 import {
   getBaseUrl,
   OAUTH_STATE_COOKIE,
-  GOOGLE_TOKEN_URL,
-  GOOGLE_USERINFO_URL,
 } from "../../../../lib/auth";
 
 export const GET: APIRoute = async ({
@@ -31,52 +30,37 @@ export const GET: APIRoute = async ({
   }
 
   const baseUrl = getBaseUrl(request);
-  const redirectUri = `${baseUrl}/api/auth/google/callback`;
+  const redirectUri = `${baseUrl}/api/webhook/google/auth`;
 
-  const tokenRes = await fetch(GOOGLE_TOKEN_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      code,
-      client_id: clientId,
-      client_secret: clientSecret,
-      redirect_uri: redirectUri,
-      grant_type: "authorization_code",
-    }),
-  });
+  const oauth2Client = new google.auth.OAuth2(
+    clientId,
+    clientSecret,
+    redirectUri
+  );
 
-  if (!tokenRes.ok) {
-    const err = await tokenRes.text();
+  try {
+    const { tokens } = await oauth2Client.getToken(code);
+    oauth2Client.setCredentials(tokens);
+  } catch (err) {
     console.error("Google token error:", err);
     return redirect("/", 302);
   }
 
-  const tokenData = (await tokenRes.json()) as { access_token?: string };
-  const accessToken = tokenData.access_token;
-  if (!accessToken) {
+  const oauth2 = google.oauth2({ version: "v2", auth: oauth2Client });
+  let data: { id?: string | null; name?: string | null; email?: string | null; picture?: string | null };
+  try {
+    const res = await oauth2.userinfo.get();
+    data = res.data ?? {};
+  } catch (err) {
+    console.error("Google userinfo error:", err);
     return redirect("/", 302);
   }
-
-  const userRes = await fetch(GOOGLE_USERINFO_URL, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  });
-
-  if (!userRes.ok) {
-    return redirect("/", 302);
-  }
-
-  const profile = (await userRes.json()) as {
-    id: string;
-    name?: string;
-    email?: string;
-    picture?: string;
-  };
 
   const user = {
-    id: profile.id,
-    name: profile.name ?? "",
-    email: profile.email ?? "",
-    picture: profile.picture,
+    id: data.id ?? "",
+    name: data.name ?? "",
+    email: data.email ?? "",
+    picture: data.picture ?? undefined,
   };
 
   await session?.set("user", user);
