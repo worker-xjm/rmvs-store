@@ -3,6 +3,7 @@ import { defineConfig, envField } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
 import process from "node:process";
 import tailwindcss from "@tailwindcss/vite";
+// import iconLibrary from 'astro-icon'
 // 仅在 CI/部署时设置 site，本地 build+preview 不设置，避免预览时资源或 canonical 指向生产域名
 const isDeployBuild =
   process.env.CI === "true" || process.env.DEPLOY_BUILD === "true";
@@ -31,4 +32,5 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  // integrations: [iconLibrary()],
 });

@@ -7,6 +7,7 @@ const navItems = [
   { href: "/shop-now", label: "Shop Now" },
 ];
 const user = await Astro.session?.get("user");
+import personSvg from "../assets/person.svg?raw";
 ---
 <header
   id="header"
@@ -39,7 +40,7 @@ const user = await Astro.session?.get("user");
             {user.picture && (
               <img
                 src={user.picture}
-                alt=""
+                alt="user profile picture"
                 width={28}
                 height={28}
                 class="rounded-full"
@@ -58,9 +59,11 @@ const user = await Astro.session?.get("user");
         ) : (
           <a
             href="/api/auth/google"
-            class="rounded bg-white/20 px-3 py-1.5 font-medium transition-colors hover:bg-white/30 text-pink-50"
+            class="rounded bg-white/20  size-8 flex items-center justify-center  font-medium transition-colors hover:bg-white/30 text-pink-50"
           >
-            使用 Google 登录
+            <span class="inline-flex size-6 [&>svg]:size-full [&>svg]:currentColor" set:html={personSvg} />
+            {/* <img src="/person.svg" alt="person" class="size-6"  /> */}
+            {/* <img src="/google.svg" alt="Google" width={20} height={20} /> */}
           </a>
         )
       }
