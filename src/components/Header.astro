@@ -6,6 +6,7 @@ const navItems = [
   { href: "/contact-us", label: "Contact us" },
   { href: "/shop-now", label: "Shop Now" },
 ];
+const user = await Astro.session?.get("user");
 ---
 <header
   id="header"
@@ -14,21 +15,54 @@ const navItems = [
   <div
     class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 md:px-6 lg:px-8 h-full"
   >
-    <a href="#home" class="text-lg font-semibold tracking-tight">
+    <a href="/" class="text-lg font-semibold tracking-tight">
       RMVS Market
     </a>
     <nav
-      class="hidden items-center gap-8 text-sm font-medium md:flex"
+      class="flex items-center gap-6 text-sm font-medium md:gap-8"
     >
+      <span class="hidden md:flex md:items-center md:gap-6">
+        {
+          navItems.map((item) => (
+            <a
+              href={item.href}
+              class="transition-colors hover:text-pink-100 text-pink-50/80"
+            >
+              {item.label}
+            </a>
+          ))
+        }
+      </span>
       {
-        navItems.map((item) => (
+        user ? (
+          <span class="flex items-center gap-3">
+            {user.picture && (
+              <img
+                src={user.picture}
+                alt=""
+                width={28}
+                height={28}
+                class="rounded-full"
+              />
+            )}
+            <span class="max-w-24 truncate text-pink-50/90 md:max-w-none">
+              {user.name || user.email}
+            </span>
+            <a
+              href="/api/auth/logout"
+              class="rounded px-2 py-1 transition-colors hover:bg-white/20 text-pink-50/80"
+            >
+              登出
+            </a>
+          </span>
+        ) : (
           <a
-            href={item.href}
-            class="transition-colors hover:text-pink-100 text-pink-50/80"
+            href="/api/auth/google"
+            class="rounded bg-white/20 px-3 py-1.5 font-medium transition-colors hover:bg-white/30 text-pink-50"
           >
-            {item.label}
+            使用 Google 登录
           </a>
-        ))
+        )
       }
     </nav>
   </div>
