@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { env } from "cloudflare:workers";
+import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "astro:env/server";
 import {
   getBaseUrl,
   OAUTH_STATE_COOKIE,
@@ -13,8 +13,8 @@ export const GET: APIRoute = async ({
   redirect,
   session,
 }) => {
-  const clientId = env.GOOGLE_CLIENT_ID;
-  const clientSecret = env.GOOGLE_CLIENT_SECRET;
+  const clientId = GOOGLE_CLIENT_ID;
+  const clientSecret = GOOGLE_CLIENT_SECRET;
   if (!clientId || !clientSecret) {
     return new Response("Google OAuth is not configured", { status: 500 });
   }

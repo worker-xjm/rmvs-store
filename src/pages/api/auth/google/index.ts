@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { env } from "cloudflare:workers";
+import { GOOGLE_CLIENT_ID } from "astro:env/server";
 import {
   getBaseUrl,
   OAUTH_STATE_COOKIE,
@@ -9,7 +9,7 @@ import {
 } from "../../../../lib/auth";
 
 export const GET: APIRoute = async ({ request, cookies, redirect }) => {
-  const clientId = env.GOOGLE_CLIENT_ID;
+  const clientId = GOOGLE_CLIENT_ID;
   if (!clientId) {
     return new Response("GOOGLE_CLIENT_ID is not configured", { status: 500 });
   }
