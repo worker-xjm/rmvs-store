@@ -4,7 +4,8 @@
 	"name": "rmvs-store",
 	"main": "@astrojs/cloudflare/entrypoints/server",
 	"vars": {
-		"GOOGLE_CLIENT_ID": "530938292972-1nf0bd36sedoe02iuh0fa0fsnsoht38s.apps.googleusercontent.com"
+		"GOOGLE_CLIENT_ID": "530938292972-1nf0bd36sedoe02iuh0fa0fsnsoht38s.apps.googleusercontent.com",
+		"NODE_OPTIONS": " --max-old-space-size=4096"
 	},
 	"assets": {
 		"directory": "./dist",
