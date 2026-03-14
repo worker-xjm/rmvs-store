@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { env } from "cloudflare:workers";
 import {
   getBaseUrl,
   OAUTH_STATE_COOKIE,
@@ -7,9 +8,8 @@ import {
   SCOPES,
 } from "../../../../lib/auth";
 
-const clientId = import.meta.env.GOOGLE_CLIENT_ID;
-
 export const GET: APIRoute = async ({ request, cookies, redirect }) => {
+  const clientId = env.GOOGLE_CLIENT_ID;
   if (!clientId) {
     return new Response("GOOGLE_CLIENT_ID is not configured", { status: 500 });
   }
@@ -23,7 +23,7 @@ export const GET: APIRoute = async ({ request, cookies, redirect }) => {
   cookies.set(OAUTH_STATE_COOKIE, state, {
     path: "/",
     httpOnly: true,
-    secure: import.meta.env.PROD,
+    secure: new URL(request.url).protocol === "https:",
     sameSite: "lax",
     maxAge: OAUTH_STATE_MAX_AGE,
   });
